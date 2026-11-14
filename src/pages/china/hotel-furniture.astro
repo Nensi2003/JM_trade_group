@@ -1,0 +1,7 @@
+---
+import FurnitureCategoryPage from '../../components/FurnitureCategoryPage.astro';
+import { furniturePages } from '../../data/site';
+const page = furniturePages.find((item) => item.title === 'Hotel Furniture')!;
+---
+
+<FurnitureCategoryPage page={page} />

@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+interface Category {
+  title: string;
+  image: string;
+  alt: string;
+}
+
+interface FurniturePage {
+  title: string;
+  href: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+  categories: Category[];
+}
+
+interface Props {
+  page: FurniturePage;
+}
+
+const { page } = Astro.props;
+---
+
+<BaseLayout title={`${page.title} | JM Trade Group`} description={page.description}>
+  <main id="main" class="furniture-page">
+    <section class="furniture-hero" style={`--hero-image: url("${page.image}")`} aria-labelledby="furniture-heading">
+      <div class="furniture-hero-shade"></div>
+      <div class="wrap furniture-hero-content">
+        <nav class="furniture-page-nav" aria-label="Page navigation">
+          <a href="/">Home</a>
+          <a href="/china/#disciplines">← Back to disciplines</a>
+        </nav>
+        <p class="eyebrow eyebrow-light"><span>One-stop support</span> · Furniture sourcing</p>
+        <h1 id="furniture-heading">{page.title}</h1>
+        <p class="furniture-hero-copy">{page.description}</p>
+      </div>
+    </section>
+
+    <section class="category-section section-pad" aria-labelledby="category-title">
+      <div class="wrap">
+        <div class="category-intro">
+          <div>
+            <p class="eyebrow"><span>Explore the spaces</span></p>
+            <h2 id="category-title">Furniture for<br /><em>every part of the project.</em></h2>
+          </div>
+          <p>We connect investors with Chinese companies, coordinate sourcing and communication. Our partners provide the products and technical expertise.</p>
+        </div>
+
+        <div class="category-grid">
+          {page.categories.map((category) => (
+            <article class="category-card">
+              <img src={category.image} alt={category.alt} loading="lazy" />
+              <div class="category-shade"></div>
+              <h3>{category.title}</h3>
+            </article>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .furniture-hero { position: relative; isolation: isolate; min-height: min(680px, calc(100svh - 88px)); display: flex; align-items: flex-end; overflow: hidden; color: white; background: #2c3935 var(--hero-image) center / cover no-repeat; }
+  .furniture-hero-shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, rgb(19 31 29 / 78%), rgb(19 31 29 / 30%) 72%), linear-gradient(0deg, rgb(19 31 29 / 68%), transparent 65%); }
+  .furniture-hero-content { padding-block: 50px 70px; }
+  .furniture-page-nav { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 38px; }
+  .furniture-page-nav a { min-height: 48px; display: inline-flex; align-items: center; padding: 0 18px; border: 1px solid rgb(255 255 255 / 60%); color: white; background: rgb(24 41 37 / 35%); font-size: 16px; font-weight: 700; transition: color .2s ease, background .2s ease, border-color .2s ease; }
+  .furniture-page-nav a:hover { color: var(--ink); border-color: #d9e8e1; background: #d9e8e1; }
+  .eyebrow-light { color: #e1eee8; }
+  .eyebrow-light > span { color: #bdd7c9; }
+  .furniture-hero h1 { max-width: 850px; margin: 0 0 20px; font: 500 clamp(52px, 8vw, 100px)/.98 var(--display); letter-spacing: -.075em; }
+  .furniture-hero-copy { max-width: 680px; margin: 0; color: rgb(255 255 255 / 88%); font-size: clamp(18px, 1.8vw, 22px); line-height: 1.65; }
+  .category-section { background: var(--paper); }
+  .category-intro { display: grid; grid-template-columns: 1.1fr .9fr; align-items: end; gap: clamp(36px, 7vw, 100px); margin-bottom: 40px; }
+  .category-intro h2 { font-size: clamp(38px, 5.3vw, 66px); }
+  .category-intro h2 em { color: var(--jade); }
+  .category-intro > p { max-width: 500px; margin: 0; color: var(--ink-soft); font-size: 18px; line-height: 1.8; }
+  .category-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .category-card { position: relative; min-height: 280px; overflow: hidden; background: var(--sage); }
+  .category-card img, .category-shade { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .category-card img { object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+  .category-card:hover img { transform: scale(1.045); }
+  .category-shade { background: linear-gradient(0deg, rgb(19 31 29 / 76%), transparent 68%); }
+  .category-card h3 { position: absolute; right: 20px; bottom: 17px; left: 20px; margin: 0; color: white; font-size: clamp(22px, 2.2vw, 28px); font-weight: 600; letter-spacing: -.04em; }
+  @media (max-width: 800px) { .category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .category-intro { grid-template-columns: 1fr; gap: 22px; } }
+  @media (max-width: 560px) { .furniture-hero { min-height: 600px; } .furniture-hero-content { padding-block: 30px 48px; } .furniture-page-nav { margin-bottom: 38px; } .category-grid { grid-template-columns: 1fr; gap: 12px; } .category-card { min-height: 240px; } }
+</style>

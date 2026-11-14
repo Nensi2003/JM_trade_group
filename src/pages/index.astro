@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { founders, servicePanels } from '../data/site';
+
+---
+
+<BaseLayout>
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <video class="hero-video" autoplay muted loop playsinline poster="/images/harbor-hero.png" aria-hidden="true">
+        <source src="/video/jmtrade-hero.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-shade"></div>
+      <div class="hero-services-fade" aria-hidden="true"></div>
+      <div class="hero-content">
+        <img class="hero-logo" src="/images/jm-trade-logo.png" alt="" />
+        <p class="hero-kicker">Trade · Law · China</p>
+        <h1 id="hero-title">JM Trade Group</h1>
+        <p class="hero-copy">Business support across borders.<br />Expertise in Germany. Coordination in China.</p>
+        <a class="button button-light" href="#services">Explore our services <span aria-hidden="true">↓</span></a>
+      </div>
+      <a class="hero-scroll" href="#services"><span>Scroll to services</span><span class="scroll-line"></span></a>
+      <span class="hero-location">Düsseldorf <span aria-hidden="true">·</span> China</span>
+    </section>
+
+    <section class="services-section" id="services" aria-label="Our services">
+      <div class="service-panels">
+        <div class="service-bridge-label" aria-hidden="true"><span></span>Our services<span></span></div>
+        {servicePanels.map((panel) => (
+          <article class={`service-panel ${panel.className}`} id={panel.id}>
+            <div class="service-panel-shade"></div>
+            <div class="service-panel-copy">
+              <h2>{panel.title}</h2>
+              <p class="service-description">{panel.description}</p>
+              <ul class="service-list">
+                {panel.services.map((service) => <li data-searchable>{service}</li>)}
+              </ul>
+              {panel.action && <a class="button service-button" href={panel.action.href}>{panel.action.label} <span aria-hidden="true">↗</span></a>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="intro-section section-pad" id="about" aria-labelledby="about-heading">
+      <div class="wrap intro-grid">
+        <div class="intro-heading">
+          <p class="eyebrow"><span>01</span> About JM Trade Group</p>
+          <h2 id="about-heading">A team working<br /><em>across two markets.</em></h2>
+        </div>
+        <div class="intro-copy">
+          <p>JM Trade Group brings together legal expertise in Germany and project coordination in China. We support companies with cross-border trade, contracts, product sourcing and production oversight.</p>
+          <a class="text-link" href="#team">Meet the people behind JM <span aria-hidden="true">↘</span></a>
+        </div>
+      </div>
+      <div class="wrap founders-grid" id="team">
+        {founders.map((founder, index) => (
+          <article class="founder-card">
+            <div class="founder-photo">
+              <img src={founder.image} alt={founder.alt} loading="lazy" />
+              <span class="founder-number">0{index + 1}</span>
+            </div>
+            <div class="founder-meta">
+              <div><h3>{founder.name}</h3><p>{founder.role}</p></div>
+              <span class="founder-location">{founder.location}</span>
+            </div>
+          </article>
+        ))}
+        <div class="founder-note">
+          <span class="note-mark" aria-hidden="true">✳</span>
+          <p>One connected team across two markets.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</BaseLayout>
+
+<script>
+  const servicePanels = document.querySelectorAll('.service-panel');
+
+  if ('IntersectionObserver' in window) {
+    document.documentElement.classList.add('service-motion');
+    const serviceObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          serviceObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16 });
+
+    servicePanels.forEach((panel) => serviceObserver.observe(panel));
+  }
+</script>

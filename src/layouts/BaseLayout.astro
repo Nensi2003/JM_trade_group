@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'JM Trade Group | Legal and China Trade Services',
+  description = 'Legal, international trade, and China sourcing support for businesses. Connect with JM Trade Group in Germany and China.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f5f4f0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteHeader />
+    <slot />
+    <SiteFooter />
+    <script>
+      const searchForm = document.querySelector<HTMLFormElement>('#site-search-form');
+      const searchInput = document.querySelector<HTMLInputElement>('#site-search-input');
+      const searchStatus = document.querySelector<HTMLElement>('#site-search-status');
+      const searchDetails = document.querySelector<HTMLDetailsElement>('.site-search');
+
+      searchForm?.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const query = searchInput?.value.trim().toLowerCase();
+        if (!query || !searchStatus) return;
+
+        const match = [...document.querySelectorAll<HTMLElement>('[data-searchable]')]
+          .find((item) => item.textContent?.toLowerCase().includes(query));
+
+        if (match) {
+          searchStatus.textContent = `Showing ${match.textContent?.trim()}.`;
+          match.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          searchDetails?.removeAttribute('open');
+        } else {
+          searchStatus.textContent = 'No matching service found. Try “law”, “trade” or “quality”.';
+        }
+      });
+
+      searchInput?.addEventListener('input', () => {
+        if (searchStatus) searchStatus.textContent = '';
+      });
+    </script>
+  </body>
+</html>

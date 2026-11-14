@@ -1,0 +1,39 @@
+---
+import { company } from '../data/site';
+const isHome = Astro.url.pathname === '/';
+const topHref = isHome ? '#top' : '/#top';
+---
+
+<footer class="site-footer" id="contact">
+  <div class="footer-main wrap">
+    <div class="footer-invite">
+      <p class="eyebrow eyebrow-light">JM Trade Group</p>
+      <h2>Let’s move your<br /><em>business forward.</em></h2>
+    </div>
+    <div class="footer-contact">
+      <div>
+        <span class="footer-label">Email</span>
+        <a href={`mailto:${company.email}`}>{company.email}</a>
+      </div>
+      <div>
+        <span class="footer-label">Office</span>
+        <address>{company.address[0]}<br />{company.address[1]}</address>
+      </div>
+      <div>
+        <span class="footer-label">Follow</span>
+        <div class="footer-socials">
+          <a href={company.socials.linkedin} target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+          <a href={company.socials.instagram} target="_blank" rel="noreferrer">Instagram <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom wrap">
+    <a class="footer-brand" href={topHref}><img class="footer-brand-logo" src="/images/jm-trade-logo.png" alt="" /> <span>Group</span></a>
+    <span class="footer-credit">
+      © {new Date().getFullYear()} JM Trade Group /
+      <a class="maintainer-link" href="https://www.linkedin.com/in/nensi-mecalla-8705912b2/" target="_blank" rel="noreferrer" aria-label="Website maintained by NM on LinkedIn (opens in a new tab)">Website maintained by NM</a>
+    </span>
+    <a href={topHref}>Back to top ↑</a>
+  </div>
+</footer>

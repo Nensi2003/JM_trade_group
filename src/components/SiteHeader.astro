@@ -1,0 +1,51 @@
+---
+import { company } from '../data/site';
+const isHome = Astro.url.pathname === '/';
+const homeHref = isHome ? '#top' : '/#top';
+const sectionHref = (section: string) => isHome ? `#${section}` : `/#${section}`;
+---
+
+<header class="site-header">
+  <a class="brand" href={homeHref} aria-label="JM Trade Group home">
+    <img class="brand-logo" src="/images/jm-trade-logo.png" alt="" />
+    <span class="brand-name">Group</span>
+  </a>
+
+  <nav class="desktop-nav" aria-label="Main navigation">
+    <a href={homeHref}>Home</a>
+    <a href={sectionHref('services')}>Services</a>
+    <a href={sectionHref('about')}>About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <nav class="mobile-nav-links" aria-label="Main navigation">
+    <a href={homeHref}>Home</a>
+    <a href={sectionHref('services')}>Services</a>
+    <a href={sectionHref('about')}>About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <div class="header-actions">
+    <a class="social-link" href={company.socials.instagram} target="_blank" rel="noreferrer" aria-label="Instagram (opens in a new tab)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.4" y="3.4" width="17.2" height="17.2" rx="5" /><circle cx="12" cy="12" r="4" /><circle class="icon-fill" cx="17.8" cy="6.5" r="1" /></svg>
+      <span>Instagram</span>
+    </a>
+    <a class="social-link linkedin-link" href={company.socials.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn (opens in a new tab)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 8.6v10.1M5.2 5.5h.02M9.6 18.7v-5.4a3.2 3.2 0 0 1 6.4 0v5.4M9.6 10.1v8.6" /></svg>
+      <span>LinkedIn</span>
+    </a>
+    <details class="site-search">
+      <summary aria-label="Open site search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7" /><path d="m16 16 4.1 4.1" /></svg>
+      </summary>
+      <form id="site-search-form" class="search-panel" role="search">
+        <label for="site-search-input">Search services</label>
+        <div class="search-row">
+          <input id="site-search-input" type="search" placeholder="Try “contract law”" autocomplete="off" />
+          <button type="submit" aria-label="Search"><span aria-hidden="true">↵</span></button>
+        </div>
+        <p id="site-search-status" class="search-status" aria-live="polite"></p>
+      </form>
+    </details>
+  </div>
+
+</header>

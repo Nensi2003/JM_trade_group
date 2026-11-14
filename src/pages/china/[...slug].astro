@@ -1,0 +1,163 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { companyMetrics, shippedContainerPhotos } from '../../data/site';
+
+export function getStaticPaths() {
+  return companyMetrics.map((metric) => ({
+    params: { slug: metric.href.replace('/china/', '').replace(/\/$/, '') },
+    props: { metric },
+  }));
+}
+
+const { metric } = Astro.props;
+const descriptionByLabel: Record<string, string> = {
+  'Ongoing Projects': 'A snapshot of projects currently in progress with coordination from our China team.',
+  'Shipped Containers': 'A record of containers shipped as part of the work we coordinate with our clients and partners.',
+  'Finished Projects': 'A snapshot of completed work delivered through our project coordination and supplier network.',
+};
+const description = descriptionByLabel[metric.label];
+const isShippedContainers = metric.label === 'Shipped Containers';
+const featuredShipment = shippedContainerPhotos.find((photo) => photo.image.endsWith('container-loading-secured.png')) ?? shippedContainerPhotos[0];
+const supportingShipment = shippedContainerPhotos.find((photo) => photo.image.endsWith('frame-assembly.png')) ?? shippedContainerPhotos[1];
+const shipmentStageOrder = ['Partner workshop', 'Packing & preparation', 'Container loading'];
+const shipmentGallery = shippedContainerPhotos
+  .filter((photo) => photo !== featuredShipment && photo !== supportingShipment)
+  .sort((a, b) => shipmentStageOrder.indexOf(a.stage) - shipmentStageOrder.indexOf(b.stage));
+const landscapeShipmentPhotos = shipmentGallery.filter((photo) => photo.orientation === 'landscape');
+const portraitShipmentPhotos = shipmentGallery.filter((photo) => photo.orientation === 'portrait');
+---
+
+<BaseLayout title={`${metric.label} | JM Trade Group`} description={`JM Trade Group: ${metric.value} ${metric.label.toLowerCase()}.`}>
+  <main id="main" class="metric-detail-page">
+    {isShippedContainers && (
+      <section class="shipment-page" aria-labelledby="shipment-gallery-title">
+        <div class="wrap">
+          <div class="shipment-heading">
+            <div>
+              <p class="eyebrow"><span>China services</span> · Shipment record</p>
+              <h1 id="shipment-gallery-title">Shipped <em>Containers</em></h1>
+            </div>
+            <a class="metric-back" href="/china/">← All China services</a>
+          </div>
+          <section class="shipment-feature" aria-label="Featured shipment photograph">
+            <figure class="shipment-feature-photo shipment-feature-photo--left">
+              <div class="shipment-frame">
+                <img class="shipment-photo" src={featuredShipment.image} alt={featuredShipment.alt} fetchpriority="high" decoding="async" />
+              </div>
+              <figcaption>{featuredShipment.caption}</figcaption>
+            </figure>
+            <div class="shipment-feature-copy">
+              <p class="eyebrow">Shipment record</p>
+              <h2>Coordinated from source to dispatch</h2>
+              <p>We connect investors with Chinese companies and coordinate sourcing, communication, preparation and shipment with our partners.</p>
+            </div>
+            <figure class="shipment-feature-photo shipment-feature-photo--right">
+              <div class="shipment-frame">
+                <img class="shipment-photo" src={supportingShipment.image} alt={supportingShipment.alt} decoding="async" />
+              </div>
+              <figcaption>{supportingShipment.caption}</figcaption>
+            </figure>
+          </section>
+          <div class="shipment-gallery-heading">
+            <span>Shipment photographs</span>
+            <span>{shipmentGallery.length} photographs</span>
+          </div>
+          <div class="shipment-photo-layout" aria-label="Shipment and container photographs">
+            <section class="shipment-photo-group shipment-photo-group--landscape" aria-labelledby="shipment-workshop-photos">
+              <h2 class="shipment-group-title" id="shipment-workshop-photos">Workshop and quality photographs</h2>
+              <div class="shipment-grid">
+                {landscapeShipmentPhotos.map((photo) => (
+                  <figure class="shipment-card">
+                    <div class="shipment-frame">
+                      <img class="shipment-photo" src={photo.image} alt={photo.alt} loading="lazy" decoding="async" />
+                    </div>
+                    <figcaption>{photo.caption}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </section>
+            <section class="shipment-photo-group shipment-photo-group--portrait" aria-labelledby="shipment-packing-photos">
+              <h2 class="shipment-group-title" id="shipment-packing-photos">Packing and container photographs</h2>
+              <div class="shipment-grid">
+                {portraitShipmentPhotos.map((photo) => (
+                  <figure class="shipment-card">
+                    <div class="shipment-frame">
+                      <img class="shipment-photo" src={photo.image} alt={photo.alt} loading="lazy" decoding="async" />
+                    </div>
+                    <figcaption>{photo.caption}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    )}
+    {!isShippedContainers && (
+      <section class="metric-detail-hero">
+        <div class="wrap metric-detail-inner">
+          <p class="eyebrow"><span>China services</span> · Company by the numbers</p>
+          <a class="metric-back" href="/china/">← All China services</a>
+          <div class="metric-detail-content">
+            <div>
+              <h1>{metric.label}</h1>
+              <p>{description}</p>
+            </div>
+            <div class="metric-detail-number" aria-label={`${metric.value} ${metric.label}`}>
+              <span>{metric.value}</span>
+              <small>{metric.label}</small>
+            </div>
+          </div>
+          <p class="metric-data-note">Figures shown are maintained in one shared site data file and can be updated as the company’s work evolves.</p>
+        </div>
+      </section>
+    )}
+  </main>
+</BaseLayout>
+
+<style>
+  .metric-detail-hero { min-height: min(660px, calc(100svh - 88px)); display: flex; align-items: center; padding-block: clamp(58px, 6.5vw, 84px); background: radial-gradient(ellipse at 85% 58%, #e0eae4 0%, transparent 42%), var(--paper); }
+  .metric-detail-inner { position: relative; }
+  .metric-back { position: absolute; top: 0; right: 0; color: var(--jade-dark); font-size: 16px; font-weight: 700; }
+  .metric-detail-content { display: grid; grid-template-columns: 1fr .8fr; align-items: center; gap: clamp(38px, 5vw, 70px); padding-top: 16px; }
+  .metric-detail-content h1 { max-width: 670px; margin: 0 0 22px; font: 500 clamp(48px, 7vw, 84px)/1 var(--display); letter-spacing: -.075em; }
+  .metric-detail-content p { max-width: 500px; margin: 0 0 30px; color: var(--ink-soft); font-size: clamp(18px, 1.7vw, 21px); line-height: 1.75; }
+  .metric-detail-number { min-height: 310px; display: flex; flex-direction: column; justify-content: center; padding: clamp(30px, 5vw, 60px); border: 1px solid #cad8d0; background: rgb(255 254 250 / 72%); }
+  .metric-detail-number span { color: var(--jade); font: 500 clamp(100px, 18vw, 190px)/.9 var(--display); letter-spacing: -.09em; }
+  .metric-detail-number small { margin-top: 20px; color: var(--ink-soft); font: 600 17px/1.4 var(--display); }
+  .metric-data-note { max-width: 560px; margin: 32px 0 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+  .shipment-page { min-height: calc(100svh - 96px); padding-block: clamp(40px, 4vw, 64px) clamp(64px, 6vw, 96px); background: radial-gradient(ellipse at 88% 9%, rgb(221 233 228 / 62%), transparent 35%), var(--paper); }
+  .shipment-page .wrap { width: min(var(--page-width), calc(100% - var(--gutter) * 2)); max-width: none; }
+  .shipment-heading { display: flex; align-items: center; justify-content: space-between; gap: 36px; margin-bottom: clamp(24px, 2.6vw, 38px); padding-bottom: clamp(18px, 1.7vw, 24px); border-bottom: 1px solid #d4ded8; }
+  .shipment-heading .eyebrow { margin: 0 0 5px; }
+  .shipment-heading h1 { margin: 0; color: var(--ink); font: 550 clamp(42px, 4.6vw, 64px)/1.04 var(--display); letter-spacing: -.065em; }
+  .shipment-heading h1 em { color: var(--jade); font-style: normal; }
+  .shipment-heading .metric-back { position: static; flex: 0 0 auto; margin-top: 8px; }
+  .shipment-feature { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, .9fr) minmax(0, 1fr); align-items: center; gap: clamp(20px, 2.2vw, 34px); padding: clamp(24px, 2.6vw, 40px); overflow: hidden; border: 1px solid rgb(47 109 98 / 32%); border-radius: 4px; background: radial-gradient(ellipse at 8% 12%, rgb(47 109 98 / 25%), transparent 34%), radial-gradient(ellipse at 92% 88%, rgb(47 109 98 / 22%), transparent 36%), linear-gradient(118deg, #dce8e2 0%, #f2f1eb 52%, #e3ece6 100%); box-shadow: 0 18px 48px rgb(35 79 72 / 9%); }
+  .shipment-feature-photo { width: min(100%, 460px); max-width: 460px; min-width: 0; justify-self: center; margin: 0; }
+  .shipment-feature-photo--left { grid-column: 1; }
+  .shipment-feature-photo--right { grid-column: 3; }
+  .shipment-feature-photo--left, .shipment-feature-photo--right { max-width: 460px; }
+  .shipment-feature-photo .shipment-frame { width: 100%; aspect-ratio: 4 / 3; border-color: rgb(35 79 72 / 30%); box-shadow: 0 10px 26px rgb(24 48 43 / 18%); }
+  .shipment-feature-photo .shipment-photo { width: 100%; height: 100%; object-fit: cover; }
+  .shipment-feature-photo--left .shipment-photo { object-position: center 44%; }
+  .shipment-feature-photo figcaption { margin-top: 11px; padding: 0 0 9px; border-bottom: 2px solid var(--jade); color: var(--ink-soft); font-size: clamp(18px, 1.2vw, 21px); font-weight: 600; line-height: 1.45; }
+  .shipment-feature-copy { grid-column: 2; grid-row: 1; max-width: 600px; min-width: 0; justify-self: center; padding: clamp(22px, 2.6vw, 38px); border: 1px solid rgb(47 109 98 / 16%); border-radius: 3px; background: rgb(250 249 245 / 91%); box-shadow: 0 12px 32px rgb(24 48 43 / 8%); text-align: center; }
+  .shipment-feature-copy .eyebrow { justify-content: center; margin-bottom: 12px; font-size: 13px; }
+  .shipment-feature-copy h2 { max-width: 520px; margin: 0 auto 18px; color: var(--ink); font: 550 clamp(30px, 2.8vw, 42px)/1.1 var(--display); letter-spacing: -.045em; text-wrap: balance; }
+  .shipment-feature-copy > p:not(.eyebrow) { max-width: 600px; margin: 0 auto; color: var(--ink-soft); font-size: clamp(21px, 1.55vw, 25px); line-height: 1.6; }
+  .shipment-gallery-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin: clamp(35px, 4vw, 56px) 0 20px; padding-bottom: 12px; border-bottom: 1px solid rgb(47 109 98 / 25%); color: var(--jade-dark); font-size: 13px; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+  .shipment-photo-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: clamp(28px, 3vw, 46px); }
+  .shipment-photo-group { min-width: 0; }
+  .shipment-photo-group--portrait { padding-left: clamp(22px, 2vw, 34px); border-left: 1px solid rgb(47 109 98 / 25%); }
+  .shipment-group-title { margin: 0 0 18px; color: var(--ink); font: 550 clamp(20px, 1.8vw, 25px)/1.2 var(--display); letter-spacing: -.025em; }
+  .shipment-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: clamp(23px, 2vw, 32px) clamp(16px, 1.4vw, 24px); }
+  .shipment-card { width: 100%; max-width: 360px; min-width: 0; margin: 0 auto; padding: 0; border: 0; background: transparent; }
+  .shipment-frame { overflow: hidden; border: 1px solid rgb(35 79 72 / 20%); border-radius: 3px; background: #e0e9e4; line-height: 0; }
+  .shipment-photo { width: 100%; height: auto; display: block; transition: transform .4s ease, filter .3s ease; }
+  .shipment-card:hover .shipment-photo { transform: scale(1.025); filter: saturate(1.04); }
+  .shipment-card figcaption { margin-top: 9px; padding: 0 0 7px; border-bottom: 1px solid var(--jade); color: var(--ink-soft); font-size: clamp(14px, .95vw, 16px); font-weight: 600; line-height: 1.4; }
+  @media (max-width: 720px) { .metric-detail-hero { min-height: calc(100svh - 112px); align-items: flex-start; padding-block: 55px; } .metric-back { position: static; display: inline-block; margin: 0 0 15px; } .metric-detail-content { grid-template-columns: 1fr; gap: 35px; padding-top: 10px; } .metric-detail-number { min-height: 220px; } .metric-data-note { margin-top: 28px; } }
+  @media (max-width: 1000px) { .shipment-heading { display: block; } .shipment-heading h1 { font-size: clamp(40px, 7vw, 54px); } .shipment-heading .metric-back { display: inline-block; margin-top: 12px; } .shipment-feature { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; gap: 22px 16px; padding: 20px; } .shipment-feature-photo { width: 100%; } .shipment-feature-photo--left { grid-column: 1; grid-row: 1; } .shipment-feature-photo--right { grid-column: 2; grid-row: 1; } .shipment-feature-copy { grid-column: 1 / -1; grid-row: 2; } .shipment-feature-copy h2 { max-width: 620px; } .shipment-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .shipment-feature { grid-template-columns: 1fr; } .shipment-feature-photo--left, .shipment-feature-photo--right { grid-column: 1; justify-self: center; } .shipment-feature-photo--right { grid-row: 2; } .shipment-feature-copy { grid-column: 1; grid-row: 3; } .shipment-photo-layout { grid-template-columns: 1fr; } .shipment-photo-group--portrait { padding: clamp(22px, 2vw, 34px) 0 0; border-top: 1px solid rgb(47 109 98 / 25%); border-left: 0; } .shipment-grid { grid-template-columns: 1fr; } .shipment-gallery-heading { font-size: 11px; } }
+</style>
