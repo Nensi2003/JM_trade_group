@@ -1,19 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { founders, servicePanels } from '../data/site';
+import { withBase } from '../lib/paths';
 
 ---
 
 <BaseLayout>
   <main id="main">
     <section class="hero" id="top" aria-labelledby="hero-title">
-      <video class="hero-video" autoplay muted loop playsinline poster="/images/harbor-hero.png" aria-hidden="true">
-        <source src="/video/jmtrade-hero.mp4" type="video/mp4" />
+      <video class="hero-video" autoplay muted loop playsinline poster={withBase('/images/harbor-hero.png')} aria-hidden="true">
+        <source src={withBase('/video/jmtrade-hero.mp4')} type="video/mp4" />
       </video>
       <div class="hero-shade"></div>
       <div class="hero-services-fade" aria-hidden="true"></div>
       <div class="hero-content">
-        <img class="hero-logo" src="/images/jm-trade-logo.png" alt="" />
+        <img class="hero-logo" src={withBase('/images/jm-trade-logo.png')} alt="" />
         <p class="hero-kicker">Trade · Law · China</p>
         <h1 id="hero-title">JM Trade Group</h1>
         <p class="hero-copy">Business support across borders.<br />Expertise in Germany. Coordination in China.</p>
@@ -35,7 +36,7 @@ import { founders, servicePanels } from '../data/site';
               <ul class="service-list">
                 {panel.services.map((service) => <li data-searchable>{service}</li>)}
               </ul>
-              {panel.action && <a class="button service-button" href={panel.action.href}>{panel.action.label} <span aria-hidden="true">↗</span></a>}
+              {panel.action && <a class="button service-button" href={withBase(panel.action.href)}>{panel.action.label} <span aria-hidden="true">↗</span></a>}
             </div>
           </article>
         ))}
@@ -57,7 +58,7 @@ import { founders, servicePanels } from '../data/site';
         {founders.map((founder, index) => (
           <article class="founder-card">
             <div class="founder-photo">
-              <img src={founder.image} alt={founder.alt} loading="lazy" />
+              <img src={withBase(founder.image)} alt={founder.alt} loading="lazy" />
               <span class="founder-number">0{index + 1}</span>
             </div>
             <div class="founder-meta">

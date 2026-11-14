@@ -1,13 +1,14 @@
 ---
 import { company } from '../data/site';
+import { withBase } from '../lib/paths';
 const isHome = Astro.url.pathname === '/';
-const homeHref = isHome ? '#top' : '/#top';
-const sectionHref = (section: string) => isHome ? `#${section}` : `/#${section}`;
+const homeHref = isHome ? '#top' : withBase('/#top');
+const sectionHref = (section: string) => isHome ? `#${section}` : withBase(`/#${section}`);
 ---
 
 <header class="site-header">
   <a class="brand" href={homeHref} aria-label="JM Trade Group home">
-    <img class="brand-logo" src="/images/jm-trade-logo.png" alt="" />
+    <img class="brand-logo" src={withBase('/images/jm-trade-logo.png')} alt="" />
     <span class="brand-name">Group</span>
   </a>
 
@@ -15,13 +16,13 @@ const sectionHref = (section: string) => isHome ? `#${section}` : `/#${section}`
     <a href={homeHref}>Home</a>
     <a href={sectionHref('services')}>Services</a>
     <a href={sectionHref('about')}>About</a>
-    <a href="#contact">Contact</a>
+    <a href={isHome ? '#contact' : withBase('/#contact')}>Contact</a>
   </nav>
   <nav class="mobile-nav-links" aria-label="Main navigation">
     <a href={homeHref}>Home</a>
     <a href={sectionHref('services')}>Services</a>
     <a href={sectionHref('about')}>About</a>
-    <a href="#contact">Contact</a>
+    <a href={isHome ? '#contact' : withBase('/#contact')}>Contact</a>
   </nav>
 
   <div class="header-actions">

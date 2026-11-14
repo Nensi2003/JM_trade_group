@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ExpertiseIcon from '../../components/ExpertiseIcon.astro';
 import { companyMetrics, chinaSystemDisciplines, furniturePages } from '../../data/site';
+import { withBase } from '../../lib/paths';
 ---
 
 <BaseLayout
@@ -19,8 +20,8 @@ import { companyMetrics, chinaSystemDisciplines, furniturePages } from '../../da
 
         <div class="furniture-grid" aria-label="Furniture sourcing disciplines">
           {furniturePages.map((page) => (
-            <a class="furniture-card" href={page.href}>
-              <span class="furniture-photo"><img src={page.image} alt={page.imageAlt} loading="lazy" /></span>
+            <a class="furniture-card" href={withBase(page.href)}>
+              <span class="furniture-photo"><img src={withBase(page.image)} alt={page.imageAlt} loading="lazy" /></span>
               <span class="furniture-copy">
                 <span class="furniture-title">{page.title}</span>
                 <span class="furniture-description">{page.description}</span>
@@ -51,7 +52,7 @@ import { companyMetrics, chinaSystemDisciplines, furniturePages } from '../../da
       </div>
     </section>
 
-    <section class="numbers-section" aria-labelledby="numbers-title">
+    <section class="numbers-section" style={`--numbers-bg-image: url("${withBase('/images/china-port-background.webp')}")`} aria-labelledby="numbers-title">
       <div class="numbers-shade" aria-hidden="true"></div>
       <div class="wrap numbers-content">
         <p class="eyebrow eyebrow-light"><span>China services</span> · At a glance</p>
@@ -61,7 +62,7 @@ import { companyMetrics, chinaSystemDisciplines, furniturePages } from '../../da
         </div>
         <div class="metric-grid">
           {companyMetrics.map((metric, index) => (
-            <a class="metric-card" href={metric.href} aria-label={`${metric.label}: ${metric.value}. View details`}>
+            <a class="metric-card" href={withBase(metric.href)} aria-label={`${metric.label}: ${metric.value}. View details`}>
               <span class="metric-ring" aria-hidden="true">
                 <svg viewBox="0 0 100 100" focusable="false">
                   <circle class="ring-track" cx="50" cy="50" r="43" pathLength="100" />
@@ -75,14 +76,14 @@ import { companyMetrics, chinaSystemDisciplines, furniturePages } from '../../da
             </a>
           ))}
         </div>
-        <a class="back-link" href="/#services">← Back to all services</a>
+        <a class="back-link" href={withBase('/#services')}>← Back to all services</a>
       </div>
     </section>
   </main>
 </BaseLayout>
 
 <style>
-  .numbers-section { position: relative; isolation: isolate; min-height: 0; padding: clamp(70px, 7.5vw, 110px) 0 56px; overflow: hidden; color: white; background: #263631 url('/images/china-port-background.webp') center 54% / cover no-repeat; }
+  .numbers-section { position: relative; isolation: isolate; min-height: 0; padding: clamp(70px, 7.5vw, 110px) 0 56px; overflow: hidden; color: white; background: #263631 var(--numbers-bg-image) center 54% / cover no-repeat; }
   .numbers-shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(105deg, rgb(20 32 30 / 91%) 0%, rgb(22 38 34 / 84%) 52%, rgb(22 38 34 / 68%) 100%); }
   .numbers-content { position: relative; }
   .eyebrow-light { color: #e1eee8; }

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/paths';
 
 interface Category {
   title: string;
@@ -25,12 +26,12 @@ const { page } = Astro.props;
 
 <BaseLayout title={`${page.title} | JM Trade Group`} description={page.description}>
   <main id="main" class="furniture-page">
-    <section class="furniture-hero" style={`--hero-image: url("${page.image}")`} aria-labelledby="furniture-heading">
+    <section class="furniture-hero" style={`--hero-image: url("${withBase(page.image)}")`} aria-labelledby="furniture-heading">
       <div class="furniture-hero-shade"></div>
       <div class="wrap furniture-hero-content">
         <nav class="furniture-page-nav" aria-label="Page navigation">
-          <a href="/">Home</a>
-          <a href="/china/#disciplines">← Back to disciplines</a>
+          <a href={withBase('/')}>Home</a>
+          <a href={withBase('/china/#disciplines')}>← Back to disciplines</a>
         </nav>
         <p class="eyebrow eyebrow-light"><span>One-stop support</span> · Furniture sourcing</p>
         <h1 id="furniture-heading">{page.title}</h1>
@@ -51,7 +52,7 @@ const { page } = Astro.props;
         <div class="category-grid">
           {page.categories.map((category) => (
             <article class="category-card">
-              <img src={category.image} alt={category.alt} loading="lazy" />
+              <img src={withBase(category.image)} alt={category.alt} loading="lazy" />
               <div class="category-shade"></div>
               <h3>{category.title}</h3>
             </article>

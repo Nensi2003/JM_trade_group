@@ -77,7 +77,7 @@ h2 em { color: var(--jade); font-weight: 400; }
 .text-link:hover span { transform: translate(3px, 3px); }
 
 /* Hero */
-.hero { position: relative; isolation: isolate; min-height: min(790px, calc(100svh - 88px)); height: min(790px, calc(100svh - 88px)); display: grid; place-items: center; overflow: hidden; color: white; background: #283a37 url('/images/harbor-hero.png') center 60% / cover no-repeat; }
+.hero { position: relative; isolation: isolate; min-height: min(790px, calc(100svh - 88px)); height: min(790px, calc(100svh - 88px)); display: grid; place-items: center; overflow: hidden; color: white; background: #283a37 var(--hero-bg-image) center 60% / cover no-repeat; }
 .hero-video, .hero-shade { position: absolute; z-index: -1; inset: 0; width: 100%; height: 100%; }
 .hero-video { object-fit: cover; }
 .hero-shade { background: linear-gradient(180deg, rgb(16 31 29 / 30%) 0%, rgb(16 31 29 / 48%) 48%, rgb(16 31 29 / 64%) 100%); }
@@ -117,8 +117,8 @@ h2 em { color: var(--jade); font-weight: 400; }
 .services-section { background: var(--ink); scroll-margin-top: 88px; }
 .service-panels { position: relative; display: grid; grid-template-columns: 1fr 1fr; }
 .service-panel { position: relative; isolation: isolate; min-width: 0; min-height: max(700px, calc(100svh - 88px)); display: flex; align-items: flex-end; overflow: hidden; color: white; background-color: #263432; background-size: cover; background-position: center; }
-.service-legal { background-image: url('/images/legal-office-background.webp'); background-position: 43% center; }
-.service-china { background-image: url('/images/china-port-background.webp'); background-position: 62% center; }
+.service-legal { background-image: var(--legal-bg-image); background-position: 43% center; }
+.service-china { background-image: var(--china-bg-image); background-position: 62% center; }
 .service-panel + .service-panel { border-left: 1px solid rgb(255 255 255 / 28%); }
 .service-panel-shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgb(20 30 29 / 12%) 0%, rgb(20 30 29 / 44%) 42%, rgb(20 30 29 / 88%) 100%); }
 .service-panel-copy { width: 100%; max-width: 850px; align-self: flex-start; padding: clamp(116px, 13vh, 168px) clamp(32px, 5vw, 78px) 48px; }

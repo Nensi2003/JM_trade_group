@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { companyMetrics, shippedContainerPhotos } from '../../data/site';
+import { withBase } from '../../lib/paths';
 
 export function getStaticPaths() {
   return companyMetrics.map((metric) => ({
@@ -37,12 +38,12 @@ const portraitShipmentPhotos = shipmentGallery.filter((photo) => photo.orientati
               <p class="eyebrow"><span>China services</span> · Shipment record</p>
               <h1 id="shipment-gallery-title">Shipped <em>Containers</em></h1>
             </div>
-            <a class="metric-back" href="/china/">← All China services</a>
+            <a class="metric-back" href={withBase('/china/')}>← All China services</a>
           </div>
           <section class="shipment-feature" aria-label="Featured shipment photograph">
             <figure class="shipment-feature-photo shipment-feature-photo--left">
               <div class="shipment-frame">
-                <img class="shipment-photo" src={featuredShipment.image} alt={featuredShipment.alt} fetchpriority="high" decoding="async" />
+                <img class="shipment-photo" src={withBase(featuredShipment.image)} alt={featuredShipment.alt} fetchpriority="high" decoding="async" />
               </div>
               <figcaption>{featuredShipment.caption}</figcaption>
             </figure>
@@ -53,7 +54,7 @@ const portraitShipmentPhotos = shipmentGallery.filter((photo) => photo.orientati
             </div>
             <figure class="shipment-feature-photo shipment-feature-photo--right">
               <div class="shipment-frame">
-                <img class="shipment-photo" src={supportingShipment.image} alt={supportingShipment.alt} decoding="async" />
+                <img class="shipment-photo" src={withBase(supportingShipment.image)} alt={supportingShipment.alt} decoding="async" />
               </div>
               <figcaption>{supportingShipment.caption}</figcaption>
             </figure>
@@ -69,7 +70,7 @@ const portraitShipmentPhotos = shipmentGallery.filter((photo) => photo.orientati
                 {landscapeShipmentPhotos.map((photo) => (
                   <figure class="shipment-card">
                     <div class="shipment-frame">
-                      <img class="shipment-photo" src={photo.image} alt={photo.alt} loading="lazy" decoding="async" />
+                      <img class="shipment-photo" src={withBase(photo.image)} alt={photo.alt} loading="lazy" decoding="async" />
                     </div>
                     <figcaption>{photo.caption}</figcaption>
                   </figure>
@@ -82,7 +83,7 @@ const portraitShipmentPhotos = shipmentGallery.filter((photo) => photo.orientati
                 {portraitShipmentPhotos.map((photo) => (
                   <figure class="shipment-card">
                     <div class="shipment-frame">
-                      <img class="shipment-photo" src={photo.image} alt={photo.alt} loading="lazy" decoding="async" />
+                      <img class="shipment-photo" src={withBase(photo.image)} alt={photo.alt} loading="lazy" decoding="async" />
                     </div>
                     <figcaption>{photo.caption}</figcaption>
                   </figure>
@@ -97,7 +98,7 @@ const portraitShipmentPhotos = shipmentGallery.filter((photo) => photo.orientati
       <section class="metric-detail-hero">
         <div class="wrap metric-detail-inner">
           <p class="eyebrow"><span>China services</span> · Company by the numbers</p>
-          <a class="metric-back" href="/china/">← All China services</a>
+          <a class="metric-back" href={withBase('/china/')}>← All China services</a>
           <div class="metric-detail-content">
             <div>
               <h1>{metric.label}</h1>
