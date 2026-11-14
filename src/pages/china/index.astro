@@ -62,7 +62,7 @@ import { withBase } from '../../lib/paths';
         </div>
         <div class="metric-grid">
           {companyMetrics.map((metric, index) => (
-            <a class="metric-card" href={withBase(metric.href)} aria-label={`${metric.label}: ${metric.value}. View details`}>
+            <article class={`metric-card ${metric.label === 'Shipped Containers' ? 'metric-card--link' : 'metric-card--static'}`}>
               <span class="metric-ring" aria-hidden="true">
                 <svg viewBox="0 0 100 100" focusable="false">
                   <circle class="ring-track" cx="50" cy="50" r="43" pathLength="100" />
@@ -72,8 +72,13 @@ import { withBase } from '../../lib/paths';
               </span>
               <span class="metric-label">{metric.label}</span>
               <span class="metric-detail">{metric.detail}</span>
-              <span class="metric-link">Explore <span aria-hidden="true">↗</span></span>
-            </a>
+              {metric.label === 'Shipped Containers' && (
+                <span class="metric-link">Explore <span aria-hidden="true">↗</span></span>
+              )}
+              {metric.label === 'Shipped Containers' && (
+                <a class="metric-card-hitarea" href={withBase(metric.href)} aria-label={`${metric.label}: ${metric.value}. Explore shipped containers`} />
+              )}
+            </article>
           ))}
         </div>
         <a class="back-link" href={withBase('/#services')}>← Back to all services</a>
@@ -94,7 +99,9 @@ import { withBase } from '../../lib/paths';
   .numbers-heading > p { max-width: 540px; margin: 0 0 7px; color: rgb(255 255 255 / 84%); font-size: clamp(18px, 1.7vw, 22px); line-height: 1.7; }
   .metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: clamp(38px, 4vw, 58px); }
   .metric-card { position: relative; min-height: 350px; display: flex; flex-direction: column; align-items: center; padding: clamp(24px, 3vw, 38px); overflow: hidden; border: 1px solid rgb(230 244 236 / 30%); background: rgb(16 34 30 / 45%); backdrop-filter: blur(8px); text-align: center; transition: transform .25s ease, background .25s ease, border-color .25s ease; }
-  .metric-card:hover { transform: translateY(-5px); border-color: rgb(230 244 236 / 72%); background: rgb(16 34 30 / 70%); }
+  .metric-card--link:hover { transform: translateY(-5px); border-color: rgb(230 244 236 / 72%); background: rgb(16 34 30 / 70%); }
+  .metric-card-hitarea { position: absolute; z-index: 1; inset: 0; border-radius: inherit; }
+  .metric-card-hitarea:focus-visible { outline: 3px solid #d5e4dc; outline-offset: -7px; }
   .metric-ring { position: relative; width: clamp(156px, 15vw, 188px); aspect-ratio: 1; display: grid; flex: 0 0 auto; place-items: center; margin-bottom: 22px; }
   .metric-ring svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; transform: rotate(-90deg); }
   .metric-ring circle { fill: none; stroke-width: 8; }
@@ -104,9 +111,9 @@ import { withBase } from '../../lib/paths';
   .metric-value { color: white; font: 500 clamp(48px, 5vw, 62px)/1 var(--display); letter-spacing: -.07em; }
   .metric-label { font: 600 clamp(18px, 2vw, 22px)/1.3 var(--display); }
   .metric-detail { max-width: 340px; margin-top: 8px; color: rgb(255 255 255 / 78%); font-size: 16px; line-height: 1.6; }
-  .metric-link { display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 18px; color: #d5e4dc; font-size: 15px; font-weight: 700; }
+  .metric-link { position: relative; z-index: 2; display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 18px; color: #d5e4dc; font-size: 15px; font-weight: 700; pointer-events: none; }
   .metric-link span { color: #b9d1c5; font-size: 18px; transition: transform .2s ease; }
-  .metric-card:hover .metric-link span { transform: translate(3px, -3px); }
+  .metric-card--link:hover .metric-link span { transform: translate(3px, -3px); }
   .back-link { display: inline-block; margin-top: 28px; color: rgb(255 255 255 / 86%); font-size: 16px; font-weight: 600; }
   .back-link:hover { color: white; }
 
